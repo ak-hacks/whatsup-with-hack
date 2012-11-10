@@ -31,6 +31,9 @@ function PusherActivityStreamer(activityChannel, ulSelector, options) {
 };
 
 PusherActivityStreamer.prototype._handleActivity = function(activity, eventType) {
+
+alert('Test :: ' + activity);
+
   var self = this;
   ++this._itemCount;
   
@@ -45,7 +48,7 @@ PusherActivityStreamer.prototype._handleActivity = function(activity, eventType)
       $(this).remove();
       --self._itemCount;
     });
-  }
+  }  
 };
 
 PusherActivityStreamer._timeToDescription = function(time) {
@@ -100,9 +103,8 @@ PusherActivityStreamer._buildListItem = function(activity) {
   var item = $('<div class="stream-item-content"></div>');
   li.append(item);
   
-  var imageInfo = activity.actor.image;
   var image = $('<div class="image">' +
-                  '<img src="' + imageInfo.url + '" width="' + imageInfo.width + '" height="' + imageInfo.height + '" />' +
+                  '<img src="' + activity.imageUrl + '" width="' + '' + '" height="' + '' + '" />' +
                 '</div>');
   item.append(image);
   
@@ -111,20 +113,20 @@ PusherActivityStreamer._buildListItem = function(activity) {
   
   var user = $('<div class="activity-row">' +
                 '<span class="user-name">' +
-                  '<a class="screen-name" title="' + activity.actor.displayName + '">' + activity.actor.displayName + '</a>' +
+                  '<a class="screen-name" title="' + activity.name + '">' + activity.name + '</a>' +
                   //'<span class="full-name">' + activity.actor.displayName + '</span>' +
                 '</span>' +
               '</div>');
   content.append(user);
   
   var message = $('<div class="activity-row">' +
-                    '<div class="text">' + activity.body + '</div>' +
+                    '<div class="text">' + activity.message + '</div>' +
                   '</div>');
   content.append(message);
   
   var time = $('<div class="activity-row">' + 
                 '<a href="' + activity.link + '" class="timestamp">' +
-                  '<span title="' + activity.published + '">' + PusherActivityStreamer._timeToDescription(activity.published) + '</span>' +
+                  '<span title="' + activity.time + '">' + activity.time + '</span>' +
                 '</a>' +
                 '<span class="activity-actions">' +
                   '<span class="tweet-action action-favorite">' +

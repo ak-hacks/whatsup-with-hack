@@ -15,8 +15,8 @@
     WEB_SOCKET_DEBUG = true;
 
     var pusher = new Pusher('255928ee415a950c8d77');
-    var channel = pusher.subscribe('test_channel');
-    channel.bind('my_event', function(data) {
+    var channel = pusher.subscribe('site-activity');
+    channel.bind('activityblabla', function(data) {
       alert(data);
     });
   </script>

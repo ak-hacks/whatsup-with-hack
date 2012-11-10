@@ -13,15 +13,17 @@ import ch.mbae.pusher.transport.HttpClientPusherTransport;
  */
 public class PusherTest {
 
+	private static String activityContent = "{\"imageUrl\":\"https://si0.twimg.com/profile_images/2409294832/image_normal.jpg\",\"name\":\"Anurag Kapur\",\"message\":\"And I am awesome too!\",\"time\":\"Nov 10, 1743\"}";
+	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		PusherChannel pusherCh = new PusherChannel("test_channel", "31406", "255928ee415a950c8d77",
+		PusherChannel pusherCh = new PusherChannel("site-activity", "31406", "255928ee415a950c8d77",
 				"a22831d92f2ca5db7399", new HttpClientPusherTransport());
 		try {
-			pusherCh.pushEvent("my_event", "{'foo':'bar'}");
+			pusherCh.pushEvent("activity", activityContent);
 		} catch (PusherTransportException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

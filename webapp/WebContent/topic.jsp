@@ -65,15 +65,11 @@ body {
 <script>
   $(function() {
     
-    var pusher = new Pusher('49e26cb8e9dde3dfc009')
+    var pusher = new Pusher('255928ee415a950c8d77')
     var activityChannel = pusher.subscribe('site-activity');
     var activityMonitor = new PusherActivityStreamer(activityChannel, "#activity_stream_example");
     
-    var examples = new ExampleActivities(activityMonitor, pusher);
-    
-    $("#sendTest").click(function(){
-      activityMonitor.sendActivity('test-event');
-    });
+    //var examples = new ExampleActivities(activityMonitor, pusher);
   });
 </script>
 
@@ -123,7 +119,34 @@ body {
 					magna.</p>
 			</div>
 		</div>
-		<hr>
+		<div class="row-fluid marketing">
+			<div class="span6">
+				<h4>Subheading</h4>
+				<p>Donec id elit non mi porta gravida at eget metus. Maecenas
+					faucibus mollis interdum.</p>
+
+				<h4>Subheading</h4>
+				<p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+					Cras mattis consectetur purus sit amet fermentum.</p>
+
+				<h4>Subheading</h4>
+				<p>Maecenas sed diam eget risus varius blandit sit amet non
+					magna.</p>
+			</div>
+			<div class="span6">
+				<h4>Subheading</h4>
+				<p>Donec id elit non mi porta gravida at eget metus. Maecenas
+					faucibus mollis interdum.</p>
+
+				<h4>Subheading</h4>
+				<p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+					Cras mattis consectetur purus sit amet fermentum.</p>
+
+				<h4>Subheading</h4>
+				<p>Maecenas sed diam eget risus varius blandit sit amet non
+					magna.</p>
+			</div>
+		</div>
 		<div class="footer">
 			<p>&copy; What's Up With... Developed at Angel Hack, London, November 2012.</p>
 		</div>
