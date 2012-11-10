@@ -20,7 +20,7 @@ public class PusherTest {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		PusherChannel pusherCh = new PusherChannel("site-activity", "31406", "255928ee415a950c8d77",
+		PusherChannel pusherCh = new PusherChannel("Obama", "31406", "255928ee415a950c8d77",
 				"a22831d92f2ca5db7399", new HttpClientPusherTransport());
 		try {
 			pusherCh.pushEvent("activity", activityContent);

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="com.angelhack.wuw.topsy.TopsyClient" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -66,7 +67,7 @@ body {
   $(function() {
     
     var pusher = new Pusher('255928ee415a950c8d77')
-    var activityChannel = pusher.subscribe('site-activity');
+    var activityChannel = pusher.subscribe('${param.t}');
     var activityMonitor = new PusherActivityStreamer(activityChannel, "#activity_stream_example");
     
     //var examples = new ExampleActivities(activityMonitor, pusher);
@@ -171,3 +172,8 @@ body {
 	<script src="assets/js/bootstrap-typeahead.js"></script>
 </body>
 </html>
+
+<%
+TopsyClient topsy = new TopsyClient();
+topsy.getResponse(request.getParameter("t"));
+%>
