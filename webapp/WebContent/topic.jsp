@@ -233,9 +233,7 @@ body {
 
 				<h4>What your friends on Facebook say...</h4>
 
-				<%
-					session.getAttribute("statusMessageList");
-				%>
+				
 				<c:forEach var="statusMessage"
 					items="${sessionScope.statusMessageList}">
 
@@ -244,6 +242,9 @@ body {
 						<c:out value="${statusMessage.message}" />
 					</p>
 				</c:forEach>
+				<%
+                    session.setAttribute("statusMessageList",null);
+                %>
 			</div>
 		</div>
 		<div class="footer">
