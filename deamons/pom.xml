@@ -72,7 +72,11 @@
 		<artifactId>rome</artifactId>
 		<version>1.0</version>
 	</dependency>
-            			
+	<dependency>
+		<groupId>com.restfb</groupId>
+		<artifactId>restfb</artifactId>
+		<version>1.6.11</version>
+	</dependency>            			
   </dependencies>
 </project>
 
