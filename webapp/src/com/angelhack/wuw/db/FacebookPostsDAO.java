@@ -3,6 +3,7 @@ package com.angelhack.wuw.db;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -11,8 +12,12 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
+import com.restfb.DefaultFacebookClient;
+import com.restfb.FacebookClient;
+import com.restfb.FacebookClient.AccessToken;
 import com.restfb.json.JsonArray;
 import com.restfb.json.JsonObject;
+import com.restfb.types.User;
 
 public class FacebookPostsDAO {
 
@@ -71,7 +76,8 @@ public class FacebookPostsDAO {
 
 					DBObject fbUserDbObj = (DBObject) JSON.parse(jsonObj
 							.toString());
-					
+					LOGGER.debug("Inserting Facebook posts into DB :: "
+							+ jsonObj.toString());
 
 					DBConnectionManager.getCollection(FACEBOOK_POSTS).insert(
 							fbUserDbObj);
@@ -96,13 +102,9 @@ public class FacebookPostsDAO {
 			if (cursor.size() <= 0) {
 				LOGGER.debug("No posts found");
 			}
-			else{
-				System.out.println("----------bahar phek raha hoon--------");
-			}
 
 			while (cursor.hasNext()) {
 				filteredPostObject = cursor.next();
-				System.out.println(filteredPostObject);
 				posts.add(filteredPostObject);
 			}
 

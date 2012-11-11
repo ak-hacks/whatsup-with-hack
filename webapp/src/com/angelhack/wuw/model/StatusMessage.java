@@ -61,8 +61,9 @@ public class StatusMessage {
 
 	@Override
 	public String toString() {
-		return "StatusMessage [statusId=" + this.statusId + ", message="
-				+ this.message + ", time=" + this.time + "]";
+		return "StatusMessage [statusId=" + statusId + ", message=" + message
+				+ ", time=" + time + ", uid=" + uid + ", parentUid="
+				+ parentUid + "]";
 	}
 
 }

@@ -75,6 +75,7 @@ body {
     
     //var examples = new ExampleActivities(activityMonitor, pusher);
   });
+  
 </script>
 
 <!-- Fav and touch icons -->
@@ -157,17 +158,20 @@ body {
 				<p><%--= stats--%></p>
 			</div>
 			<div class="span6">
-				<h4>Subheading</h4>
-				<p>Donec id elit non mi porta gravida at eget metus. Maecenas
-					faucibus mollis interdum.</p>
-
-				<h4>Subheading</h4>
-				<p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-					Cras mattis consectetur purus sit amet fermentum.</p>
-
-				<h4>Subheading</h4>
-				<p>Maecenas sed diam eget risus varius blandit sit amet non
-					magna.</p>
+			
+				<h4>What your friends on Facebook say...</h4>
+				
+				<%
+				session.getAttribute("statusMessageList");
+				
+				
+				%>
+				<c:forEach var="statusMessage" items="${sessionScope.statusMessageList}">
+				
+				    <p>
+                       <a href='#'> <c:out value="${statusMessage.uid}" /></a> says <c:out value="${statusMessage.message}" />
+                    </p>
+				</c:forEach>
 			</div>
 		</div>
 		<div class="footer">

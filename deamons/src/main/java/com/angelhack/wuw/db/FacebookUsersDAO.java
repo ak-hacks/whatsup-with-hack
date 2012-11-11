@@ -31,6 +31,7 @@ public class FacebookUsersDAO {
 				+ jsonObj.toString());
 		DBConnectionManager.getCollection(FACEBOOK_USERS).insert(fbUserDbObj);
 	}
+	
 
 	public List<DBObject> getFacebookUsers() {
 		BasicDBObject query = new BasicDBObject();

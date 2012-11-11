@@ -3,7 +3,9 @@
  */
 package com.angelhack.wuw.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -17,6 +19,7 @@ import com.restfb.FacebookClient;
 import com.restfb.FacebookClient.AccessToken;
 import com.restfb.Parameter;
 import com.restfb.exception.FacebookException;
+import com.restfb.types.User;
 
 /**
  * @author anurag.kapur
@@ -31,17 +34,17 @@ public class FBService {
 	private static final String MY_APP_SECRET = new String(
 			"4091215d61a657016071bcbf66a5992a");
 
-	public List<DBObject> insertPostsForUser() {
+	public List<DBObject> insertPosts() {
 		FacebookUsersDAO dao = new FacebookUsersDAO();
 		List<DBObject> users = dao.getFacebookUsers();
 		for (DBObject dbObject : users) {
-			insertPosts((Integer) dbObject.get("_id"),
+			insertPostsForUser((String) dbObject.get("_id"),
 					(String) dbObject.get("accessToken"));
 		}
 		return users;
 	}
 
-	public void insertPosts(Integer uid, String accessTokenString) {
+	public void insertPostsForUser(String uid, String accessTokenString) {
 
 		if (accessTokenString == null || uid == null
 				|| "".equals(accessTokenString.trim())) {
@@ -50,36 +53,52 @@ public class FBService {
 
 		} else {
 
-			// Tells Facebook to extend the lifetime of MY_ACCESS_TOKEN.
-			// Facebook may return the same token or a new one.
-			AccessToken accessToken = new DefaultFacebookClient()
-					.obtainExtendedAccessToken(MY_APP_ID, MY_APP_SECRET,
-							accessTokenString);
-
-			FacebookClient facebookClient = new DefaultFacebookClient(
-					accessToken.getAccessToken());
-
 			try {
+				// Tells Facebook to extend the lifetime of MY_ACCESS_TOKEN.
+				// Facebook may return the same token or a new one.
+				AccessToken accessToken = new DefaultFacebookClient()
+						.obtainExtendedAccessToken(MY_APP_ID, MY_APP_SECRET,
+								accessTokenString);
 
-				long time = System.currentTimeMillis() - (14 * 24 * 60 * 60);
-				String query = "SELECT status_id, message, time FROM status WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 ="
-						+ uid.intValue() + " and time > " + time + ") ";
-				Connection<StatusMessage> friendsStatusMessages = facebookClient
-						.fetchConnection("fql", StatusMessage.class,
-								Parameter.with("q", query));
+				FacebookClient facebookClient = new DefaultFacebookClient(
+						accessToken.getAccessToken());
+
+				String query = "SELECT status_id, message, time, uid FROM status WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 ="
+						+ uid + ") ";
+				Connection<User> myFriends = facebookClient.fetchConnection(uid
+						+ "/friends", User.class);
+				List<com.angelhack.wuw.model.StatusMessage> lists = facebookClient
+						.executeQuery(query,
+								com.angelhack.wuw.model.StatusMessage.class);
+
+				List<User> friendList = myFriends != null ? myFriends.getData()
+						: null;
+
+				Map<String, String> friendNames = new HashMap<String, String>();
+
+				if (friendList != null)
+					for (User user : friendList) {
+						System.out.println(user);
+						friendNames.put(user.getId(), user.getName());
+					}
+
+				System.out.println(lists.size());
 
 				FacebookPostsDAO facebookPostsDAO = new FacebookPostsDAO();
-				for (List<StatusMessage> statusMessages : friendsStatusMessages) {
-					for (StatusMessage statusMessage : statusMessages) {
+				for (com.angelhack.wuw.model.StatusMessage statusMessage : lists) {
 
-						if (statusMessage.getMessage() != null) {
-							facebookPostsDAO.insertFacebookPost(
-									statusMessage.getStatusId(),
-									statusMessage.getMessage(),
-									statusMessage.getTime());
-						}
+					if (statusMessage.getMessage() != null) {
+						String from = friendNames.get(statusMessage.getUid()) != null ? friendNames
+								.get(statusMessage.getUid()) : statusMessage
+								.getUid();
+
+						facebookPostsDAO.insertFacebookPost(
+								statusMessage.getStatusId(),
+								statusMessage.getMessage(),
+								statusMessage.getTime(), from, uid);
 
 					}
+
 				}
 
 			} catch (FacebookException ex) {
@@ -96,6 +115,6 @@ public class FBService {
 	public static void main(String[] args) {
 
 		FBService fbService = new FBService();
-		fbService.insertPostsForUser();
+		fbService.insertPosts();
 	}
 }
