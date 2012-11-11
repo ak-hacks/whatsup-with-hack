@@ -4,7 +4,8 @@
 <%@ page import="com.angelhack.wuw.google.*" %>
 <%@ page import="com.sun.syndication.feed.synd.*" %>
 <%@ page import="java.util.*" %>
-
+<%@ page import="java.net.*" %>
+<%@ page import="java.io.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -135,8 +136,25 @@ body {
 		</div>
 		<div class="row-fluid marketing">
 			<div class="span6">
-				<h4>Live Tweets</h4>
-				<ul id="activity_stream_example" class="activity-stream"></ul>
+				<h4>Interesting Statistics</h4>
+				<%
+				String stats = "";
+				try{
+					URL url = new URL("http://otter.topsy.com/searchcount.json?q="+ URLEncoder.encode(request.getParameter("t"),"UTF-8"));
+					URLConnection connection = url.openConnection();
+					BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+					StringBuffer responseBuffer = new StringBuffer();
+					String inputLine;
+					while ((inputLine = in.readLine()) != null) {
+						responseBuffer.append(inputLine);
+					}
+					stats = responseBuffer.toString();
+				}catch(Exception e) {
+					out.println("Something went wrong :(");
+				}
+				
+				%>
+				<p><%--= stats--%></p>
 			</div>
 			<div class="span6">
 				<h4>Subheading</h4>

@@ -86,7 +86,6 @@ public class TopsyService {
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 			}
-
 		}
 	}
 

@@ -21,7 +21,7 @@ public class DBConnectionManager {
 	 */
 	public static DB getDatabase() throws UnknownHostException {
 		if(db == null) {
-			Mongo m = new Mongo( "localhost" , 27017 );
+			Mongo m = new Mongo( "ec2-50-17-155-10.compute-1.amazonaws.com" , 27017 );
 			db = m.getDB( "whatsupwith" );
 		}
 		return db;
