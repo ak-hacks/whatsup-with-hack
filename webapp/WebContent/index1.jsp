@@ -97,7 +97,7 @@
       </div>
       <div class="row-fluid marketing">
         <div class="span6">
-          <h4><a href="topic.jsp?t=Angel%20Hack">Angel Hack</a></h4>
+          <h4><a href="topic.jsp?t=AngelHack">Angel Hack</a></h4>
         </div>
 
         <div class="span6">

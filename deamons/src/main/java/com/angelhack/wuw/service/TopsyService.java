@@ -3,6 +3,8 @@
  */
 package com.angelhack.wuw.service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.List;
@@ -63,10 +65,15 @@ public class TopsyService {
 	private static void doTopsyQuery() {
 		for (String topic : topics) {
 			TopsyClient topsyClient = new TopsyClient();
-			JSONObject jsonResponse = topsyClient.getResponse(topic);
-
-			TopsyService topsyService = new TopsyService();
-			topsyService.processTopsyResponse(jsonResponse, topic);
+			JSONObject jsonResponse;
+			try {
+				jsonResponse = topsyClient.getResponse(URLEncoder.encode(topic,"UTF-8"));
+				TopsyService topsyService = new TopsyService();
+				topsyService.processTopsyResponse(jsonResponse, topic);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -114,7 +121,7 @@ public class TopsyService {
 				doTopsyPusher();
 			}
 		};
-		topsyPusherExecutor.scheduleWithFixedDelay(topsyPusherTask, 0, 60, TimeUnit.SECONDS);
+		topsyPusherExecutor.scheduleWithFixedDelay(topsyPusherTask, 0, 10, TimeUnit.SECONDS);
 
 	}
 }
