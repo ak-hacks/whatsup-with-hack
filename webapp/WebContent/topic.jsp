@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page import="com.angelhack.wuw.google.*" %>
-<%@ page import="com.sun.syndication.feed.synd.*" %>
-<%@ page import="java.util.*" %>
-<%@ page import="java.net.*" %>
-<%@ page import="java.io.*" %>
+<%@ page import="com.angelhack.wuw.google.*"%>
+<%@ page import="com.sun.syndication.feed.synd.*"%>
+<%@ page import="java.util.*"%>
+<%@ page import="java.net.*"%>
+<%@ page import="java.io.*"%>
+<%@ page import="org.json.simple.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -15,7 +16,8 @@
 <!-- Le styles -->
 <link href="assets/css/bootstrap.css" rel="stylesheet">
 <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
-<link href="assets/css/activity-streams.css"rel="stylesheet" type="text/css" />
+<link href="assets/css/activity-streams.css" rel="stylesheet"
+	type="text/css" />
 <style type="text/css">
 body {
 	padding-top: 20px;
@@ -65,17 +67,17 @@ body {
 <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 <script src="http://js.pusherapp.com/1.10/pusher.min.js"></script>
 <script src="assets/js/PusherActivityStreamer.js"></script>
-<script src="assets/js/ExampleActivities.js"></script>    
+<script src="assets/js/ExampleActivities.js"></script>
 <script>
-  $(function() {
-    
-    var pusher = new Pusher('255928ee415a950c8d77')
-    var activityChannel = pusher.subscribe('${param.t}');
-    var activityMonitor = new PusherActivityStreamer(activityChannel, "#activity_stream_example");
-    
-    //var examples = new ExampleActivities(activityMonitor, pusher);
-  });
-  
+	$(function() {
+
+		var pusher = new Pusher('255928ee415a950c8d77')
+		var activityChannel = pusher.subscribe('${param.t}');
+		var activityMonitor = new PusherActivityStreamer(activityChannel,
+				"#activity_stream_example");
+
+		//var examples = new ExampleActivities(activityMonitor, pusher);
+	});
 </script>
 
 <!-- Fav and touch icons -->
@@ -114,28 +116,98 @@ body {
 			<div class="span6">
 				<h4>Expert Views</h4>
 				<%
-				NewsSearch search = new NewsSearch();
-				List results = search.getResults(request.getParameter("t"));
-				int count = 0;
-				for (Iterator i = results.iterator(); i.hasNext();) {
-					count ++;
-					if(count > 6) {
-						break;
-					}
-					SyndEntry entry = (SyndEntry) i.next();
-					String title = entry.getTitle();
-					String source = title.substring(title.indexOf(" - "));
-					%>
-					<p>
+					NewsSearch search = new NewsSearch();
+					List results = search.getResults(request.getParameter("t"));
+					int count = 0;
+					for (Iterator i = results.iterator(); i.hasNext();) {
+						count++;
+						if (count > 6) {
+							break;
+						}
+						SyndEntry entry = (SyndEntry) i.next();
+						String title = entry.getTitle();
+						String source = title.substring(title.indexOf(" - "));
+				%>
+				<p>
 					<%=entry.getTitle()%>
 					<a href="<%=entry.getLink()%>"><%=source%></a>
-					</p>
-					<%
-				}
+				</p>
+				<%
+					}
 				%>
 			</div>
 		</div>
 		<div class="row-fluid marketing">
+			<div class="span6">
+
+				<h4>Interesting Statistics</h4>
+
+				<%
+					Long last24h = new Long(452);
+
+					Long last1h = new Long(53);
+
+					String stats = "";
+
+					try {
+
+						URL url = new URL("http://otter.topsy.com/searchcount.json?q="
+								+ URLEncoder.encode(request.getParameter("t"), "UTF-8"));
+
+						URLConnection connection = url.openConnection();
+
+						BufferedReader in = new BufferedReader(new InputStreamReader(
+								connection.getInputStream()));
+
+						StringBuffer responseBuffer = new StringBuffer();
+
+						String inputLine;
+
+						while ((inputLine = in.readLine()) != null) {
+
+							responseBuffer.append(inputLine);
+
+						}
+
+						stats = responseBuffer.toString();
+
+						JSONObject jsonResponse = null;
+
+						Object obj = JSONValue.parse(responseBuffer.toString());
+
+						if (obj.getClass().equals(JSONObject.class)) {
+
+							JSONObject jsonObject = (JSONObject) obj;
+
+							jsonResponse = (JSONObject) jsonObject.get("response");
+
+							last24h = (Long) jsonResponse.get("d");
+
+							last1h = (Long) jsonResponse.get("h");
+
+						}
+
+					} catch (Exception e) {
+
+						out.println("Something went wrong :( " + e);
+
+					}
+				%>
+
+				<p>
+					In the last 24 hrs, <b><%=last24h%></b> people have talked about
+					${param.t} on Twitter
+				</p>
+
+				<p>
+					<b><%=last1h%></b> people have talked about the same in the last 1
+					hr on Twitter
+				</p>
+
+			</div>
+
+
+			<%-- 
 			<div class="span6">
 				<h4>Interesting Statistics</h4>
 				<%
@@ -155,27 +227,28 @@ body {
 				}
 				
 				%>
-				<p><%--= stats--%></p>
-			</div>
+				<p>= stats</p>
+			</div> --%>
 			<div class="span6">
-			
+
 				<h4>What your friends on Facebook say...</h4>
-				
+
 				<%
-				session.getAttribute("statusMessageList");
-				
-				
+					session.getAttribute("statusMessageList");
 				%>
-				<c:forEach var="statusMessage" items="${sessionScope.statusMessageList}">
-				
-				    <p>
-                       <a href='#'> <c:out value="${statusMessage.uid}" /></a> says <c:out value="${statusMessage.message}" />
-                    </p>
+				<c:forEach var="statusMessage"
+					items="${sessionScope.statusMessageList}">
+
+					<p>
+						<a href='#'> <c:out value="${statusMessage.uid}" /></a> says
+						<c:out value="${statusMessage.message}" />
+					</p>
 				</c:forEach>
 			</div>
 		</div>
 		<div class="footer">
-			<p>&copy; What's Up With... Developed at Angel Hack, London, November 2012.</p>
+			<p>&copy; What's Up With... Developed at Angel Hack, London,
+				November 2012.</p>
 		</div>
 	</div>
 	<!-- /container -->
