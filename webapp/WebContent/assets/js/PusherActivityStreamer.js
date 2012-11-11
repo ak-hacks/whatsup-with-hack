@@ -32,8 +32,6 @@ function PusherActivityStreamer(activityChannel, ulSelector, options) {
 
 PusherActivityStreamer.prototype._handleActivity = function(activity, eventType) {
 
-alert('Test :: ' + activity);
-
   var self = this;
   ++this._itemCount;
   
@@ -104,7 +102,7 @@ PusherActivityStreamer._buildListItem = function(activity) {
   li.append(item);
   
   var image = $('<div class="image">' +
-                  '<img src="' + activity.imageUrl + '" width="' + '' + '" height="' + '' + '" />' +
+                  '<img src="' + activity.topsy_author_img + '" width="' + '' + '" height="' + '' + '" />' +
                 '</div>');
   item.append(image);
   
@@ -113,20 +111,20 @@ PusherActivityStreamer._buildListItem = function(activity) {
   
   var user = $('<div class="activity-row">' +
                 '<span class="user-name">' +
-                  '<a class="screen-name" title="' + activity.name + '">' + activity.name + '</a>' +
+                  '<a class="screen-name" title="' + activity.trackback_author_nick + '">' + activity.trackback_author_name + '</a>' +
                   //'<span class="full-name">' + activity.actor.displayName + '</span>' +
                 '</span>' +
               '</div>');
   content.append(user);
   
   var message = $('<div class="activity-row">' +
-                    '<div class="text">' + activity.message + '</div>' +
+                    '<div class="text">' + activity.content + '</div>' +
                   '</div>');
   content.append(message);
   
   var time = $('<div class="activity-row">' + 
-                '<a href="' + activity.link + '" class="timestamp">' +
-                  '<span title="' + activity.time + '">' + activity.time + '</span>' +
+                '<a href="' + activity.trackback_permalink + '" class="timestamp">' +
+                  '<span title="' + activity.trackback_date + '">' + activity.trackback_date + '</span>' +
                 '</a>' +
                 '<span class="activity-actions">' +
                   '<span class="tweet-action action-favorite">' +

@@ -26,7 +26,7 @@ body {
 }
 
 .container-narrow>hr {
-	margin: 30px 0;
+	margin: 15px 0;
 }
 
 /* Main marketing message and sign up button */
@@ -47,7 +47,7 @@ body {
 
 /* Supporting marketing content */
 .marketing {
-	margin: 60px 0;
+	margin: 20px 0;
 }
 
 .marketing p+h4 {
@@ -104,6 +104,7 @@ body {
 		<hr>
 		<div class="row-fluid marketing">
 			<div class="span6">
+				<h4>Popular Tweets</h4>
 				<ul id="activity_stream_example" class="activity-stream"></ul>
 			</div>
 			<div class="span6">
@@ -122,17 +123,8 @@ body {
 		</div>
 		<div class="row-fluid marketing">
 			<div class="span6">
-				<h4>Subheading</h4>
-				<p>Donec id elit non mi porta gravida at eget metus. Maecenas
-					faucibus mollis interdum.</p>
-
-				<h4>Subheading</h4>
-				<p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-					Cras mattis consectetur purus sit amet fermentum.</p>
-
-				<h4>Subheading</h4>
-				<p>Maecenas sed diam eget risus varius blandit sit amet non
-					magna.</p>
+				<h4>Live Tweets</h4>
+				<ul id="activity_stream_example" class="activity-stream"></ul>
 			</div>
 			<div class="span6">
 				<h4>Subheading</h4>
