@@ -31,27 +31,30 @@ public class FacebookUsersDAO {
 				+ jsonObj.toString());
 		DBConnectionManager.getCollection(FACEBOOK_USERS).insert(fbUserDbObj);
 	}
-	
+
 	public List<DBObject> getFacebookUsers() {
 		BasicDBObject query = new BasicDBObject();
 		List<DBObject> users = new ArrayList<DBObject>();
-		
+
 		try {
-			DBCursor cursor = DBConnectionManager.getCollection(FACEBOOK_USERS).find(query);
+			DBCursor cursor = DBConnectionManager.getCollection(FACEBOOK_USERS)
+					.find(query);
 			DBObject userObject = null;
 			if (cursor.size() <= 0) {
 				LOGGER.debug("No users found");
 			}
-			
+
 			while (cursor.hasNext()) {
 				userObject = cursor.next();
 				users.add(userObject);
 			}
+
+			cursor.close();
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return users;
 	}
 }
