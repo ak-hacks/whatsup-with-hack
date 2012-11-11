@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page import="com.angelhack.wuw.topsy.TopsyClient" %>
+<%@ page import="com.angelhack.wuw.google.*" %>
+<%@ page import="com.sun.syndication.feed.synd.*" %>
+<%@ page import="java.util.*" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -104,21 +106,31 @@ body {
 		<hr>
 		<div class="row-fluid marketing">
 			<div class="span6">
-				<h4>Popular Tweets</h4>
+				<h4>Popular On Twittersphere</h4>
 				<ul id="activity_stream_example" class="activity-stream"></ul>
 			</div>
 			<div class="span6">
-				<h4>Subheading</h4>
-				<p>Donec id elit non mi porta gravida at eget metus. Maecenas
-					faucibus mollis interdum.</p>
-
-				<h4>Subheading</h4>
-				<p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-					Cras mattis consectetur purus sit amet fermentum.</p>
-
-				<h4>Subheading</h4>
-				<p>Maecenas sed diam eget risus varius blandit sit amet non
-					magna.</p>
+				<h4>Expert Views</h4>
+				<%
+				NewsSearch search = new NewsSearch();
+				List results = search.getResults(request.getParameter("t"));
+				int count = 0;
+				for (Iterator i = results.iterator(); i.hasNext();) {
+					count ++;
+					if(count > 6) {
+						break;
+					}
+					SyndEntry entry = (SyndEntry) i.next();
+					String title = entry.getTitle();
+					String source = title.substring(title.indexOf(" - "));
+					%>
+					<p>
+					<%=entry.getTitle()%>
+					<a href="<%=entry.getLink()%>"><%=source%></a>
+					</p>
+					<%
+				}
+				%>
 			</div>
 		</div>
 		<div class="row-fluid marketing">
@@ -164,8 +176,3 @@ body {
 	<script src="assets/js/bootstrap-typeahead.js"></script>
 </body>
 </html>
-
-<%
-TopsyClient topsy = new TopsyClient();
-topsy.getResponse(request.getParameter("t"));
-%>
