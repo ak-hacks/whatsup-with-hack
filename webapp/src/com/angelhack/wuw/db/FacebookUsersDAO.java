@@ -19,7 +19,7 @@ public class FacebookUsersDAO {
 
 		JsonObject jsonObj = new JsonObject();
 
-		jsonObj.put("parentUserId", uid);
+		jsonObj.put("_id", uid);
 		jsonObj.put("accessToken", accessToken);
 
 		DBObject fbUserDbObj = (DBObject) JSON.parse(jsonObj.toString());
